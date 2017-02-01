@@ -1,0 +1,37 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/background"
+             tools:context="com.guanzhuli.dayday.SplashActivity">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+
+
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+    <RelativeLayout android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:fitsSystemWindows="true">
+        <TextView android:id="@+id/fullscreen_content"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:keepScreenOn="true"
+                  android:textColor="@color/secondary_text"
+                  android:textStyle="bold"
+                  android:textSize="40sp"
+                  android:fontFamily="casual"
+                  android:gravity="center"
+                  android:layout_centerVertical="true" android:layout_centerHorizontal="true"
+                  android:text="DayDay"/>
+        <ImageView
+                android:layout_gravity="center"
+                android:src="@mipmap/ic_launcher"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_above="@+id/fullscreen_content" android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
+</FrameLayout>
