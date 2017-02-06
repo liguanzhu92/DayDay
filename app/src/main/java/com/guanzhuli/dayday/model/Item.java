@@ -9,16 +9,18 @@ import java.util.Date;
  * Created by Guanzhu Li on 2/5/2017.
  */
 public class Item {
-    private int mID;
+    private Integer mID;
     private String mTitle;
     private String mDate; // format: "1992/09/02"
     private int mRepeat;
     private boolean mBefore;
+    private boolean mCover;
+    private boolean mNotification;
     private long mInterval;
     private Theme mTheme;
     private String mThemeName;
 
-    public int getID() {
+    public Integer getID() {
         return mID;
     }
 
@@ -40,6 +42,7 @@ public class Item {
 
     public void setDate(String date) {
         mDate = date;
+        setInterval();
     }
 
     public int getRepeat() {
@@ -58,7 +61,7 @@ public class Item {
         return mInterval;
     }
 
-    public void setInterval(String interval) {
+    private void setInterval() {
         // String strThatDay = "1985/08/25";
         String strThatDay = mDate;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
@@ -96,5 +99,36 @@ public class Item {
 
     public String getThemeName() {
         return mThemeName;
+    }
+
+    public boolean isCover() {
+        return mCover;
+    }
+
+    public void setCover(boolean cover) {
+        mCover = cover;
+    }
+
+    public boolean isNotification() {
+        return mNotification;
+    }
+
+    public void setNotification(boolean notification) {
+        mNotification = notification;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("ID: " + mID + "\n");
+        stringBuilder.append("Title: " + mTitle + "\n");
+        stringBuilder.append("Date: " + mDate + "\n");
+        stringBuilder.append("Interval: " + String.valueOf(mInterval) + "\n");
+        stringBuilder.append("Repeat: " + String.valueOf(mRepeat) + "\n");
+        stringBuilder.append("Theme: " + mThemeName + "\n");
+        stringBuilder.append("Before: " + String.valueOf(mBefore) + "\n");
+        stringBuilder.append("Cover: " + String.valueOf(mCover) + "\n");
+        stringBuilder.append("Notification: " + String.valueOf(mNotification) + "\n");
+        return stringBuilder.toString();
     }
 }

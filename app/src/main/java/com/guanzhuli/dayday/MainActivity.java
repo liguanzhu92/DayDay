@@ -2,15 +2,23 @@ package com.guanzhuli.dayday;
 
 
 
-import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import com.guanzhuli.dayday.controller.DBManipulation;
 import com.guanzhuli.dayday.fragment.HomeFragment;
+import com.guanzhuli.dayday.model.DaysList;
+import com.guanzhuli.dayday.model.Item;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private DaysList mDaysList = DaysList.getInstance();
+    private DBManipulation mDBManipulation = DBManipulation.getInstance(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,15 +27,29 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
+        Log.d("main", "create");
+        mDaysList.clear();
+        List<Item> items = mDBManipulation.selectAll();
+        mDaysList.addAll(items);
         if(findViewById(R.id.container_main) != null) {
             HomeFragment fragment = new HomeFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.container_main, fragment);
             ft.commit();
         }
+    }
 
-/*        // set button: nav to setting activity
-        Intent setting = new Intent(MainActivity.this, SettingsActivity.class);
-        MainActivity.this.startActivity(setting);*/
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("main", "destroy");
+        for (int i = 0; i < mDaysList.size(); i++) {
+            Item item = mDaysList.get(i);
+            if (item.getID() == null) {
+                mDBManipulation.insert(item);
+            } else {
+                mDBManipulation.update(String.valueOf(item.getID()), item);
+            }
+        }
     }
 }

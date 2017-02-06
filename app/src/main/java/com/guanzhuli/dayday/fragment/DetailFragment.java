@@ -57,7 +57,8 @@ public class DetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent edit = new Intent(getContext(), NewDayActivity.class);
-                edit.putExtra("position", 5);
+                edit.putExtra("add", false);
+                edit.putExtra("position", 0);
                 startActivity(edit);
             }
         });

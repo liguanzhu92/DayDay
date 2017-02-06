@@ -58,6 +58,10 @@
                         android:tint="@color/divider"
                         android:layout_width="0dp" android:layout_height="wrap_content"/>
             </LinearLayout>
+            <RadioGroup
+                    android:id="@+id/new_day_category_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
             <LinearLayout
                     android:gravity="center_horizontal"
                     android:layout_width="match_parent"
@@ -98,7 +102,7 @@
             </LinearLayout>
             <CalendarView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/new_day_calendar"/>
+                    android:layout_height="match_parent" android:id="@+id/new_day_calendar"/>
             <Switch
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
@@ -136,6 +140,10 @@
                         android:tint="@color/divider"
                         android:layout_width="0dp" android:layout_height="wrap_content"/>
             </LinearLayout>
+            <RadioGroup
+                    android:id="@+id/new_day_repeat_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
             <LinearLayout
                     android:gravity="center_horizontal"
                     android:layout_width="match_parent"

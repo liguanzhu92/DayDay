@@ -10,4 +10,13 @@
         <item>"Trip"</item>
         <item>"Work"</item>
     </array>
+    <array name="repeat_name">
+        <item>"None"</item>
+        <item>"Weekly"</item>
+        <item>"Bi-Weekly"</item>
+        <item>"Monthly"</item>
+        <item>"Quarterly"</item>
+        <item>"Semi-annually"</item>
+        <item>"Annually"</item>
+    </array>
 </resources>

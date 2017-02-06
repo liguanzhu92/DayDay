@@ -15,6 +15,8 @@ public class DBHelper  extends SQLiteOpenHelper {
     public static final String DATE = "date";
     public static final String THEME = "theme";
     public static final String REPEAT = "repeat";
+    public static final String COVER = "cover";
+    public static final String NOTIFICATION = "notification";
     public static final int VERSION = 1;
     // new a table to save custom category
 
@@ -28,7 +30,8 @@ public class DBHelper  extends SQLiteOpenHelper {
         String createTable = " CREATE TABLE " + TABLENAME + "("
                 + ID + " INTEGER PRIMARY KEY AUTO_INCREMENT,"
                 + TITLE + " TEXT," + DATE + " TEXT,"
-                + THEME + " TEXT," + REPEAT + " BOOLEAN)";
+                + THEME + " TEXT," + REPEAT + " INTEGER,"
+                + COVER + " INTEGER," + NOTIFICATION + "INTEGER)";
         sqLiteDatabase.execSQL(createTable);
     }
 

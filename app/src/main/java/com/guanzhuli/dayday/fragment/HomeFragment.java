@@ -63,7 +63,9 @@ public class HomeFragment extends Fragment {
         mImageAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(), NewDayActivity.class));
+                Intent add = new Intent(getContext(), NewDayActivity.class);
+                add.putExtra("add", true);
+                startActivity(add);
             }
         });
         mImageSetting.setOnClickListener(new View.OnClickListener() {

@@ -40,6 +40,8 @@ public class DBManipulation {
         contentValues.put(mDBHelper.DATE, item.getDate());
         contentValues.put(mDBHelper.THEME, item.getThemeName());
         contentValues.put(mDBHelper.REPEAT, item.getRepeat());
+        contentValues.put(mDBHelper.COVER, item.isCover());
+        contentValues.put(mDBHelper.NOTIFICATION, item.isNotification());
         long i = mSQLiteDatabase.insert(mDBHelper.TABLENAME, null, contentValues);
         if (i > -1) {
             Toast.makeText(mContext, "Successfully", Toast.LENGTH_SHORT).show();
@@ -55,6 +57,8 @@ public class DBManipulation {
         contentValues.put(mDBHelper.DATE, item.getDate());
         contentValues.put(mDBHelper.THEME, item.getThemeName());
         contentValues.put(mDBHelper.REPEAT, item.getRepeat());
+        contentValues.put(mDBHelper.COVER, item.isCover());
+        contentValues.put(mDBHelper.NOTIFICATION, item.isNotification());
         int res = mSQLiteDatabase.update(mDBHelper.TABLENAME,
                 contentValues, mDBHelper.ID + " = ?",
                 new String[] {id});
@@ -96,6 +100,12 @@ public class DBManipulation {
             item.setDate(date);
             String theme = cursor.getString(cursor.getColumnIndex(mDBHelper.THEME));
             item.setTheme(theme);
+            int repeat = cursor.getInt(cursor.getColumnIndex(mDBHelper.REPEAT));
+            item.setRepeat(repeat);
+            int cover = cursor.getInt(cursor.getColumnIndex(mDBHelper.COVER));
+            item.setCover(cover == 1 ? true : false);
+            int notification = cursor.getInt(cursor.getColumnIndex(mDBHelper.NOTIFICATION));
+            item.setNotification(notification == 1 ? true : false);
             result.add(item);
             if (cursor.moveToNext()) {
                 continue;
