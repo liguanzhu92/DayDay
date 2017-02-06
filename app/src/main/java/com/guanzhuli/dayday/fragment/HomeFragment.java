@@ -20,7 +20,7 @@ import com.guanzhuli.dayday.SettingsActivity;
 public class HomeFragment extends Fragment {
     private BottomSheetBehavior mBottomSheetBehavior;
     private View rootView;
-    private ImageView mImageSetting, mImageAdd;
+    private ImageView mImageSetting, mImageAdd, mImageBackgrount;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -44,6 +44,7 @@ public class HomeFragment extends Fragment {
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         mImageSetting = (ImageView) rootView.findViewById(R.id.home_setting);
         mImageAdd = (ImageView) rootView.findViewById(R.id.home_add);
+        mImageBackgrount = (ImageView) rootView.findViewById(R.id.home_background);
     }
 
     private void setListener() {
@@ -72,7 +73,16 @@ public class HomeFragment extends Fragment {
                 startActivity(setting);
             }
         });
-
+        mImageBackgrount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DetailFragment detailFragment = new DetailFragment();
+                getFragmentManager().beginTransaction()
+                        .addToBackStack(getTag())
+                        .replace(R.id.container_main, detailFragment)
+                        .commit();
+            }
+        });
     }
 
 

@@ -19,11 +19,12 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
-
-        HomeFragment fragment = new HomeFragment();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container_main, fragment);
-        ft.commit();
+        if(findViewById(R.id.container_main) != null) {
+            HomeFragment fragment = new HomeFragment();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.container_main, fragment);
+            ft.commit();
+        }
 
 /*        // set button: nav to setting activity
         Intent setting = new Intent(MainActivity.this, SettingsActivity.class);
