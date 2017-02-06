@@ -28,10 +28,10 @@ public class DBHelper  extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         Log.e("sqlite", "create table");
         String createTable = " CREATE TABLE " + TABLENAME + "("
-                + ID + " INTEGER PRIMARY KEY AUTO_INCREMENT,"
+                + ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + TITLE + " TEXT," + DATE + " TEXT,"
                 + THEME + " TEXT," + REPEAT + " INTEGER,"
-                + COVER + " INTEGER," + NOTIFICATION + "INTEGER)";
+                + COVER + " INTEGER," + NOTIFICATION + " INTEGER)";
         sqLiteDatabase.execSQL(createTable);
     }
 

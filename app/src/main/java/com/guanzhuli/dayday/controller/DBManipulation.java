@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.widget.Toast;
 import com.guanzhuli.dayday.model.DaysList;
 import com.guanzhuli.dayday.model.Item;
@@ -44,8 +45,10 @@ public class DBManipulation {
         contentValues.put(mDBHelper.NOTIFICATION, item.isNotification());
         long i = mSQLiteDatabase.insert(mDBHelper.TABLENAME, null, contentValues);
         if (i > -1) {
+            Log.d("sqlite","insert" + item.getTitle());
             Toast.makeText(mContext, "Successfully", Toast.LENGTH_SHORT).show();
         } else {
+            Log.d("sqlite","failed insert" + item.getTitle());
             Toast.makeText(mContext, "Add Failed. Already existed", Toast.LENGTH_SHORT).show();
         }
     }
@@ -63,8 +66,10 @@ public class DBManipulation {
                 contentValues, mDBHelper.ID + " = ?",
                 new String[] {id});
         if (res > 0) {
+            Log.d("sqlite","update" + item.getID());
             Toast.makeText(mContext, "Update successfully", Toast.LENGTH_LONG).show();
         } else {
+            Log.d("sqlite","failed update" + item.getID());
             Toast.makeText(mContext, "Update failed, this id does not exist", Toast.LENGTH_LONG).show();
         }
     }

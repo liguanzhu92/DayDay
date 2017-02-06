@@ -102,7 +102,7 @@
             </LinearLayout>
             <CalendarView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" android:id="@+id/new_day_calendar"/>
+                    android:layout_height="300dp" android:id="@+id/new_day_calendar"/>
             <Switch
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"

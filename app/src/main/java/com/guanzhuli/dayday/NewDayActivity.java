@@ -11,6 +11,7 @@ import android.widget.*;
 import com.guanzhuli.dayday.model.DaysList;
 import com.guanzhuli.dayday.model.Item;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -41,6 +42,15 @@ public class NewDayActivity extends AppCompatActivity {
             setContent();
         } else {
             mItem = new Item();
+            mItem.setTheme("Anniversary");
+            mTextCategory.setText("Anniversary");
+            mItem.setRepeat(0);
+            mTextRepeat.setText("None");
+            Calendar cal = Calendar.getInstance();
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            String date = dateFormat.format(cal.getTime());
+            mItem.setDate(date);
+            mTextDate.setText(date);
         }
         setListener();
     }
@@ -71,9 +81,6 @@ public class NewDayActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mRadioGroupCategory.setVisibility(View.VISIBLE);
                 createCategoryButton();
-                if(!mFlag) {
-                    mRadioGroupCategory.check(convertCategory(mItem.getThemeName()));
-                }
             }
         });
         mImageDate.setOnClickListener(new View.OnClickListener() {
@@ -101,9 +108,6 @@ public class NewDayActivity extends AppCompatActivity {
                 Toast.makeText(NewDayActivity.this, "choose repeat", Toast.LENGTH_LONG).show();
                 mRadioGroupRepeat.setVisibility(View.VISIBLE);
                 createRepeatButton();
-                if(!mFlag) {
-                    mRadioGroupRepeat.check(mItem.getRepeat());
-                }
             }
         });
         mImageChooseBG.setOnClickListener(new View.OnClickListener() {
@@ -126,9 +130,13 @@ public class NewDayActivity extends AppCompatActivity {
     }
 
     private void createRepeatButton() {
+        mRadioGroupRepeat.removeAllViews();
         final String[] btnName = getResources().getStringArray(R.array.repeat_name);
         for (int i = 0; i < btnName.length; i++) {
             RadioButton radioButton = new RadioButton(this);
+            if(i == mItem.getRepeat()) {
+                radioButton.setChecked(true);
+            }
             radioButton.setText(btnName[i]);
             radioButton.setId(i);
             mRadioGroupRepeat.addView(radioButton);
@@ -144,9 +152,13 @@ public class NewDayActivity extends AppCompatActivity {
     }
 
     private void createCategoryButton() {
+        mRadioGroupCategory.removeAllViews();
         final String[] btnName = getResources().getStringArray(R.array.theme_category);
         for (int i = 0; i < btnName.length; i++) {
             RadioButton radioButton = new RadioButton(this);
+            if(i == convertCategory(mItem.getThemeName())) {
+                radioButton.setChecked(true);
+            }
             radioButton.setText(btnName[i]);
             radioButton.setId(i);
             mRadioGroupCategory.addView(radioButton);

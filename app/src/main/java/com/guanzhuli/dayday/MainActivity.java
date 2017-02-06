@@ -18,7 +18,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private DaysList mDaysList = DaysList.getInstance();
-    private DBManipulation mDBManipulation = DBManipulation.getInstance(this);
+    private DBManipulation mDBManipulation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d("main", "create");
         mDaysList.clear();
+        mDBManipulation = DBManipulation.getInstance(this);
         List<Item> items = mDBManipulation.selectAll();
         mDaysList.addAll(items);
         if(findViewById(R.id.container_main) != null) {
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             ft.commit();
         }
     }
+
 
     @Override
     protected void onDestroy() {
