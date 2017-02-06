@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="theme_category">
+        <item>"Anniversary"</item>
+        <item>"Birthday"</item>
+        <item>"Event"</item>
+        <item>"Holiday"</item>
+        <item>"Love"</item>
+        <item>"School"</item>
+        <item>"Trip"</item>
+        <item>"Work"</item>
+    </array>
+</resources>

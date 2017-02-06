@@ -1,0 +1,100 @@
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context="com.guanzhuli.dayday.fragment.HomeFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
+        <ImageView
+                android:scaleType="fitXY"
+                android:src="@mipmap/anniversary_2"
+                android:layout_width="match_parent" android:layout_height="match_parent"/>
+        <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
+            <ImageView
+                    android:id="@+id/home_add"
+                    android:clickable="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:padding="@dimen/wide_padding"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/icons"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <ImageView
+                    android:id="@+id/home_setting"
+                    android:clickable="true"
+                    android:src="@drawable/ic_settings"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:padding="@dimen/wide_padding"
+                    android:tint="@color/icons"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:adjustViewBounds="false"/>
+            <TextView
+                    android:textColor="@color/icons"
+                    android:text="sample detail"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/home_details"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <LinearLayout
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_above="@+id/home_details"
+                    android:layout_alignParentStart="true">
+                <View
+                        android:layout_marginRight="@dimen/general_padding"
+                        android:layout_width="80dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@android:color/darker_gray"/>
+                <ImageView
+                        android:tint="@color/icons"
+                        android:src="@drawable/ic_anniversary"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                <View
+                        android:layout_marginLeft="@dimen/general_padding"
+                        android:layout_width="80dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@android:color/darker_gray"/>
+            </LinearLayout>
+            <TextView
+                    android:paddingBottom="@dimen/wide_padding"
+                    android:layout_above="@id/home_details"
+                    android:textColor="@color/icons"
+                    android:text="390"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/home_days"
+                    android:textSize="50sp"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <ImageView
+                    android:layout_toRightOf="@+id/home_days"
+                    android:layout_alignTop="@id/home_days"
+                    android:id="@+id/home_before"
+                    android:tint="@color/icons"
+                    android:src="@drawable/ic_arrow_upward"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        </RelativeLayout>
+    </FrameLayout>
+    <android.support.v4.widget.NestedScrollView
+            android:id="@+id/bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:clipToPadding="true"
+            android:background="@color/white_overlay"
+            app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent" android:layout_height="match_parent">
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Your Days"
+                android:padding="16dp"
+                android:textSize="16sp"/>
+        <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
+                                                android:layout_height="match_parent"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

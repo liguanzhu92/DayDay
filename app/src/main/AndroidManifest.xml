@@ -29,6 +29,10 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="com.guanzhuli.dayday.MainActivity"/>
         </activity>
+        <activity
+                android:parentActivityName=".MainActivity"
+                android:name=".NewDayActivity">
+        </activity>
     </application>
 
 </manifest>
