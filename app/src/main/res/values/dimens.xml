@@ -4,6 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="general_padding">8dp</dimen>
     <dimen name="wide_padding">32dp</dimen>
+    <dimen name="narrow_padding">4dp</dimen>
     <dimen name="bottom_icon_padding_vertical">24dp</dimen>
     <dimen name="bottom_icon_padding_horizontal">16dp</dimen>
 </resources>

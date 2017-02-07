@@ -28,6 +28,12 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
         Log.d("main", "create");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("main", "resume");
         mDaysList.clear();
         mDBManipulation = DBManipulation.getInstance(this);
         List<Item> items = mDBManipulation.selectAll();
@@ -40,11 +46,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d("main", "destroy");
+    protected void onPause() {
+        super.onPause();
+        Log.d("main", "pause");
         for (int i = 0; i < mDaysList.size(); i++) {
             Item item = mDaysList.get(i);
             if (item.getID() == null) {
@@ -54,4 +59,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }
