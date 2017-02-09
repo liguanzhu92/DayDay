@@ -11,6 +11,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +20,13 @@ import android.widget.ImageView;
 import com.guanzhuli.dayday.NewDayActivity;
 import com.guanzhuli.dayday.R;
 import com.guanzhuli.dayday.SettingsActivity;
+import com.guanzhuli.dayday.controller.DBManipulation;
 import com.guanzhuli.dayday.customized.MyAdapter;
 import com.guanzhuli.dayday.customized.RecycleViewDivider;
+import com.guanzhuli.dayday.model.DaysList;
+import com.guanzhuli.dayday.model.Item;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +37,7 @@ public class HomeFragment extends Fragment {
     private ImageView mImageSetting, mImageAdd, mImageBackgrount;
     private RecyclerView mRecyclerView;
     private Paint p = new Paint();
+    private DBManipulation mDBManipulation;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -42,6 +49,10 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView =  inflater.inflate(R.layout.fragment_home, container, false);
+        DaysList.getInstance().clear();
+        mDBManipulation = DBManipulation.getInstance(getContext());
+        List<Item> items = mDBManipulation.selectAll();
+        DaysList.getInstance().addAll(items);
         initialView();
         setListener();
         setRecyclerView();
@@ -128,7 +139,6 @@ public class HomeFragment extends Fragment {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 final int position = viewHolder.getAdapterPosition();
                 if (direction == ItemTouchHelper.LEFT) {
-                    ((MyAdapter.ExampleViewHolder) viewHolder).foreground.setVisibility(View.GONE);
                     ((MyAdapter.ExampleViewHolder) viewHolder).background.setVisibility(View.VISIBLE);
                 }
             }
@@ -137,14 +147,13 @@ public class HomeFragment extends Fragment {
             public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 super.clearView(recyclerView, viewHolder);
                 viewHolder.itemView.setAlpha(1.0f);
-                ((MyAdapter.ExampleViewHolder) viewHolder).foreground.setVisibility(View.VISIBLE);
-                ((MyAdapter.ExampleViewHolder) viewHolder).background.setVisibility(View.GONE);
             }
 
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
                     if(dX < 0){
+                        View itemView = viewHolder.itemView;
                         final float alpha = 1.0f - Math.abs(dX/2) / (float) viewHolder.itemView.getWidth();
                         viewHolder.itemView.setAlpha(alpha);
                     }

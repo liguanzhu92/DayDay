@@ -28,16 +28,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
         Log.d("main", "create");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("main", "resume");
-        mDaysList.clear();
         mDBManipulation = DBManipulation.getInstance(this);
-        List<Item> items = mDBManipulation.selectAll();
-        mDaysList.addAll(items);
         if(findViewById(R.id.container_main) != null) {
             HomeFragment fragment = new HomeFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -47,9 +38,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("main", "pause");
+    protected void onResume() {
+        super.onResume();
+        Log.d("main", "resume");
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("main", "stop");
         for (int i = 0; i < mDaysList.size(); i++) {
             Item item = mDaysList.get(i);
             if (item.getID() == null) {

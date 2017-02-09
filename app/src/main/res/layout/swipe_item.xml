@@ -2,21 +2,11 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_gravity="center"
+             android:paddingLeft="@dimen/general_padding"
+             android:paddingRight="@dimen/general_padding"
                 android:layout_width="match_parent"
                 android:layout_height="48dp">
-    <LinearLayout
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:id="@+id/swipe_background"
-            android:orientation="horizontal"
-            android:layout_width="match_parent" android:layout_height="40dp">
-        <ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
-                     android:src="@drawable/ic_delete"
-                     android:backgroundTint="@android:color/holo_red_light"
-                     android:layout_width="match_parent"
-                     android:tint="@color/icons"
-                     android:layout_height="match_parent"/>
-    </LinearLayout>
+
     <LinearLayout
             android:gravity="center_vertical"
             android:id="@+id/swipe_foreground"
@@ -35,11 +25,13 @@
                 android:layout_weight="11"
                 android:layout_width="0dp" android:layout_height="wrap_content">
             <TextView
+                    android:id="@+id/swipe_title_fore"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:text="to sf"
                     android:layout_width="match_parent" android:layout_height="wrap_content"/>
             <TextView
+                    android:id="@+id/swipe_date_fore"
                     android:text="2017-02-10"
                     android:layout_width="match_parent" android:layout_height="wrap_content"/>
 
@@ -49,16 +41,31 @@
                 android:layout_width="0dp" android:layout_height="match_parent">
             <TextView
                     android:layout_centerVertical="true"
-                    android:id="@+id/swipe_days_left"
+                    android:id="@+id/swipe_interval_fore"
                     android:text="3"
                     android:textSize="24sp"
                     android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             <ImageView
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/swipe_days_left"
+                    android:layout_toRightOf="@id/swipe_interval_fore"
                     android:tint="@color/divider"
+                    android:id="@+id/swipe_before_fore"
                     android:src="@drawable/ic_arrow_downward"
                     android:layout_width="wrap_content" android:layout_height="wrap_content"/>
         </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:id="@+id/swipe_background"
+            android:orientation="horizontal"
+            android:layout_width="match_parent" android:layout_height="match_parent">
+        <ImageButton
+                android:id="@+id/swipe_btn_delete"
+                android:src="@drawable/ic_delete"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:layout_width="match_parent"
+                android:tint="@color/icons"
+                android:layout_height="match_parent"/>
     </LinearLayout>
 </FrameLayout>

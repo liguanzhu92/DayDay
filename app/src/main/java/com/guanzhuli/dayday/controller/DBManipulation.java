@@ -77,8 +77,10 @@ public class DBManipulation {
     public void delete(String id) {
         int mark = mSQLiteDatabase.delete(mDBHelper.TABLENAME,mDBHelper.ID + " = ?", new String[] {id});
         if(mark > 0) {
+            Log.d("sqlite","delete" + id);
             Toast.makeText(mContext, "remove successfully", Toast.LENGTH_LONG).show();
         } else {
+            Log.d("sqlite","delete failed" + id);
             Toast.makeText(mContext, "remove failed", Toast.LENGTH_LONG).show();
         }
     }
@@ -95,7 +97,8 @@ public class DBManipulation {
         cursor.moveToFirst();
         if (cursor.getCount() == 0) return result;
         // Cursor: like iteration, it has pointer!
-        while (true) {
+        for (int i = 0; i < cursor.getCount(); i++) {
+            cursor.move(i);
             Item item = new Item();
             int id = cursor.getInt(cursor.getColumnIndex(mDBHelper.ID));
             item.setID(id);
@@ -108,17 +111,16 @@ public class DBManipulation {
             int repeat = cursor.getInt(cursor.getColumnIndex(mDBHelper.REPEAT));
             item.setRepeat(repeat);
             int cover = cursor.getInt(cursor.getColumnIndex(mDBHelper.COVER));
-            item.setCover(cover == 1 ? true : false);
+            item.setCover(changeInteger(cover));
             int notification = cursor.getInt(cursor.getColumnIndex(mDBHelper.NOTIFICATION));
-            item.setNotification(notification == 1 ? true : false);
+            item.setNotification(changeInteger(notification));
             result.add(item);
-            if (cursor.moveToNext()) {
-                continue;
-            } else {
-                break;
-            }
         }
         return result;
+    }
+
+    private boolean changeInteger(int i){
+        return i == 1 ? true : false;
     }
 /*    public int getRecordNumber() {
         Cursor cursor = mSQLiteDatabase.rawQuery("select * from " + mDBHelper.TABLENAME, null);
