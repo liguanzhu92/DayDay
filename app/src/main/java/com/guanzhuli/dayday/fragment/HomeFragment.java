@@ -1,6 +1,8 @@
 package com.guanzhuli.dayday.fragment;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
@@ -8,11 +10,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,6 +29,7 @@ import com.guanzhuli.dayday.customized.MyAdapter;
 import com.guanzhuli.dayday.model.DaysList;
 import com.guanzhuli.dayday.model.Item;
 import com.guanzhuli.dayday.utils.CheckCover;
+import com.guanzhuli.dayday.utils.Convert;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,7 +40,7 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
     private BottomSheetBehavior mBottomSheetBehavior;
     private View rootView;
-    private TextView mTextDays, mTextTitle;
+    private TextView mTextDays, mTextTitle, mTextYourDays;
     private ImageView mImageSetting, mImageAdd, mImageBackground, mImageBefore, mImageIcon;
     private RecyclerView mRecyclerView;
     private ORMHelper mHelper;
@@ -83,11 +88,20 @@ public class HomeFragment extends Fragment {
     private void initialView() {
         View bottomSheet = rootView.findViewById( R.id.bottom_sheet );
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        mBottomSheetBehavior.setPeekHeight(154);
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int height = displaymetrics.heightPixels;
+        mBottomSheetBehavior.setPeekHeight(height);
+        // Log.d("home",String.valueOf((int)Convert.convertPixelsToDp(height, getContext())));
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         mImageSetting = (ImageView) rootView.findViewById(R.id.home_setting);
         mImageAdd = (ImageView) rootView.findViewById(R.id.home_add);
         mImageBackground = (ImageView) rootView.findViewById(R.id.home_background);
+        mTextYourDays = (TextView) rootView.findViewById(R.id.home_your_days);
+        mImageBackground.getLayoutParams().height = height - 175;
+        Log.d("home_bg", String.valueOf(mImageBackground.getLayoutParams().height));
+        Log.d("home_text", String.valueOf(mTextYourDays.getLayoutParams().height));
+        mImageBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
         mImageIcon = (ImageView)rootView.findViewById(R.id.home_icon);
         mImageBefore = (ImageView) rootView.findViewById(R.id.home_before);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.home_recyclerview);
@@ -113,7 +127,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onStateChanged(View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                    mBottomSheetBehavior.setPeekHeight(154);
+                    mBottomSheetBehavior.setPeekHeight(getActivity().getWindow().getDecorView().getHeight());
+                    Log.d("home_collapsed", String.valueOf(getActivity().getWindow().getDecorView().getHeight()));
                 }
             }
 
