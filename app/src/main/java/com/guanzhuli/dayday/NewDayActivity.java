@@ -42,7 +42,7 @@ public class NewDayActivity extends AppCompatActivity {
             setContent();
         } else {
             mItem = new Item();
-            mItem.setTheme("Anniversary");
+            mItem.setThemeName("Anniversary");
             mTextCategory.setText("Anniversary");
             mItem.setRepeat(0);
             mTextRepeat.setText("None");
@@ -167,7 +167,7 @@ public class NewDayActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 mTextCategory.setText(btnName[i]);
-                mItem.setTheme(btnName[i]);
+                mItem.setThemeName(btnName[i]);
                 mRadioGroupCategory.setVisibility(View.GONE);
             }
         });

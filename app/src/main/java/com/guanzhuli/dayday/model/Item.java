@@ -1,5 +1,8 @@
 package com.guanzhuli.dayday.model;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -8,16 +11,24 @@ import java.util.Date;
 /**
  * Created by Guanzhu Li on 2/5/2017.
  */
+@DatabaseTable(tableName = "days")
 public class Item {
+    @DatabaseField(generatedId=true)
     private Integer mID;
+    @DatabaseField(columnName="title")
     private String mTitle;
+    @DatabaseField(columnName="date")
     private String mDate; // format: "1992/09/02"
+    @DatabaseField(columnName="repeat")
     private int mRepeat;
     private boolean mBefore;
+    @DatabaseField(columnName="cover")
     private boolean mCover;
+    @DatabaseField(columnName="notification")
     private boolean mNotification;
     private long mInterval;
     private Theme mTheme;
+    @DatabaseField(columnName="themename")
     private String mThemeName;
 
     public Integer getID() {
@@ -61,7 +72,7 @@ public class Item {
         return mInterval;
     }
 
-    private void setInterval() {
+    public void setInterval() {
         // String strThatDay = "1985/08/25";
         String strThatDay = mDate;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
@@ -90,11 +101,13 @@ public class Item {
     public Theme getTheme() {
         return mTheme;
     }
-
-    public void setTheme(String themeName) {
-        mThemeName = themeName;
+    public void setTheme() {
         ThemeFactory themeFactory = new ThemeFactory();
-        mTheme = themeFactory.getTheme(themeName);
+        mTheme = themeFactory.getTheme(mThemeName);
+    }
+
+    public void setThemeName(String themeName) {
+        mThemeName = themeName;
     }
 
     public String getThemeName() {

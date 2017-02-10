@@ -54,18 +54,4 @@
                     android:layout_width="wrap_content" android:layout_height="wrap_content"/>
         </RelativeLayout>
     </LinearLayout>
-    <LinearLayout
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:id="@+id/swipe_background"
-            android:orientation="horizontal"
-            android:layout_width="match_parent" android:layout_height="match_parent">
-        <ImageButton
-                android:id="@+id/swipe_btn_delete"
-                android:src="@drawable/ic_delete"
-                android:backgroundTint="@android:color/holo_red_light"
-                android:layout_width="match_parent"
-                android:tint="@color/icons"
-                android:layout_height="match_parent"/>
-    </LinearLayout>
 </FrameLayout>

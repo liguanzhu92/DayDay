@@ -8,17 +8,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import com.guanzhuli.dayday.controller.DBManipulation;
+import com.guanzhuli.dayday.controller.ORMHelper;
 import com.guanzhuli.dayday.fragment.HomeFragment;
 import com.guanzhuli.dayday.model.DaysList;
 import com.guanzhuli.dayday.model.Item;
 
-import java.util.List;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private DaysList mDaysList = DaysList.getInstance();
-    private DBManipulation mDBManipulation;
+    private ORMHelper mHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
         Log.d("main", "create");
-        mDBManipulation = DBManipulation.getInstance(this);
+        mHelper = ORMHelper.getInstance(this);
         if(findViewById(R.id.container_main) != null) {
             HomeFragment fragment = new HomeFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -51,9 +53,17 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < mDaysList.size(); i++) {
             Item item = mDaysList.get(i);
             if (item.getID() == null) {
-                mDBManipulation.insert(item);
+                try {
+                    mHelper.getUserDao().create(item);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             } else {
-                mDBManipulation.update(String.valueOf(item.getID()), item);
+                try {
+                    mHelper.getUserDao().updateId(item, item.getID());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
