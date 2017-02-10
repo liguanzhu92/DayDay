@@ -6,14 +6,18 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.guanzhuli.dayday.NewDayActivity;
 import com.guanzhuli.dayday.R;
+import com.guanzhuli.dayday.model.DaysList;
+import com.guanzhuli.dayday.model.Item;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,8 +25,11 @@ import com.guanzhuli.dayday.R;
 public class DetailFragment extends Fragment {
     private BottomSheetBehavior mBottomSheetBehavior;
     private View rootView;
-    private ImageView mImageEdit, mImageShare;
+    private ImageView mImageEdit, mImageShare, mImageIcon, mImageBefore, mImageBackground;
     private ImageView mImageFBShare, mImageGGShare, mImageTwitterShare, mImageEmailShare, mImageMSGShare;
+    private TextView mTextDetails, mTextDays;
+    private int mPosition;
+    private Item mItem;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -34,15 +41,29 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView =  inflater.inflate(R.layout.fragment_detail, container, false);
+        mPosition = Integer.parseInt(getArguments().getString("list_position"));
+        mItem = DaysList.getInstance().get(mPosition);
         initialView();
         setListener();
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("detail", "Start");
+        setContent();
     }
 
     private void initialView() {
         View view = rootView.findViewById(R.id.details_bottom_sheet);
         mBottomSheetBehavior = BottomSheetBehavior.from(view);
         mBottomSheetBehavior.setPeekHeight(0);
+        mImageIcon = (ImageView) rootView.findViewById(R.id.details_icon);
+        mImageBefore = (ImageView) rootView.findViewById(R.id.details_before);
+        mImageBackground = (ImageView) rootView.findViewById(R.id.details_background);
+        mTextDays = (TextView) rootView.findViewById(R.id.details_days);
+        mTextDetails = (TextView) rootView.findViewById(R.id.details_title);
         mImageEdit = (ImageView) rootView.findViewById(R.id.details_edit);
         mImageShare = (ImageView) rootView.findViewById(R.id.details_share);
         mImageFBShare = (ImageView) rootView.findViewById(R.id.details_share_fb);
@@ -52,13 +73,22 @@ public class DetailFragment extends Fragment {
         mImageMSGShare = (ImageView) rootView.findViewById(R.id.details_share_msg);
     }
 
+    private void setContent() {
+        mImageIcon.setImageResource(mItem.getTheme().IconResources());
+        mImageBackground.setImageResource(mItem.getTheme().BackgroundResources());
+        mImageBefore.setImageResource(
+                mItem.isBefore()? R.drawable.ic_arrow_upward : R.drawable.ic_arrow_downward);
+        mTextDetails.setText(mItem.getTitle());
+        mTextDays.setText(String.valueOf(mItem.getInterval()));
+    }
+
     private void setListener() {
         mImageEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent edit = new Intent(getContext(), NewDayActivity.class);
                 edit.putExtra("add", false);
-                edit.putExtra("position", 0);
+                edit.putExtra("position", mPosition);
                 startActivity(edit);
             }
         });

@@ -14,8 +14,10 @@ import com.guanzhuli.dayday.model.Item;
 /**
  * Created by Guanzhu Li on 2/6/2017.
  */
-public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
     private Context mContext;
+
+
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder {
         public LinearLayout foreground;
@@ -50,6 +52,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     item.getTheme().IconResources());
             ((ExampleViewHolder) holder).mImageBefore.setImageResource(
                     item.isBefore()? R.drawable.ic_arrow_upward : R.drawable.ic_arrow_downward);
+            ((ExampleViewHolder) holder).itemView.setTag(String.valueOf(position));
         }
     }
 
@@ -64,8 +67,22 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.swipe_item, parent, false);
+        v.setOnClickListener(this);
         return new ExampleViewHolder(v);
     }
 
+    // set on click listener
+    private OnRecyclerViewItemClickListener mOnItemClickListener = null;
+    @Override
+    public void onClick(View view) {
+        mOnItemClickListener.onItemClick(view,(String)view.getTag());
+    }
 
+    public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
+        this.mOnItemClickListener = listener;
+    }
+
+    public interface OnRecyclerViewItemClickListener {
+        void onItemClick(View view , String data);
+    }
 }

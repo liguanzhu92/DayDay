@@ -19,9 +19,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private DaysList mDaysList = DaysList.getInstance();
-    private ORMHelper mHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
         Log.d("main", "create");
-        mHelper = ORMHelper.getInstance(this);
         if(findViewById(R.id.container_main) != null) {
             HomeFragment fragment = new HomeFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -50,22 +46,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.d("main", "stop");
-        for (int i = 0; i < mDaysList.size(); i++) {
-            Item item = mDaysList.get(i);
-            if (item.getID() == null) {
-                try {
-                    mHelper.getUserDao().create(item);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
-                    mHelper.getUserDao().updateId(item, item.getID());
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
 }

@@ -1,5 +1,6 @@
 package com.guanzhuli.dayday;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,9 +9,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
+import com.guanzhuli.dayday.controller.ORMHelper;
 import com.guanzhuli.dayday.model.DaysList;
 import com.guanzhuli.dayday.model.Item;
+import com.guanzhuli.dayday.utils.CheckCover;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,12 +32,16 @@ public class NewDayActivity extends AppCompatActivity {
     private Item mItem;
     private boolean mFlag;
     private int mPosition;
+    private Context mContext;
+    private ORMHelper mHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("");
         setContentView(R.layout.activity_new_day);
+        mContext = this;
+        mHelper = ORMHelper.getInstance(mContext);
         initialView();
         Intent intent = getIntent();
         mFlag = intent.getBooleanExtra("add",false);
@@ -186,13 +194,33 @@ public class NewDayActivity extends AppCompatActivity {
             Toast.makeText(NewDayActivity.this, "save date", Toast.LENGTH_LONG).show();
             mItem.setTitle(mEditTitle.getText().toString());
             mItem.setCover(mSwitchCover.isChecked());
+            if (mSwitchCover.isChecked()) {
+                try {
+                    new CheckCover(mContext).removeCover();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
             mItem.setNotification(mSwitchNotification.isChecked());
-            DaysList.getInstance().add(mItem);
-            Log.d("item", mItem.toString());
-            finish();
-            return true;
+            if (!mFlag) {
+                // edit mode
+                DaysList.getInstance().add(mPosition, mItem);
+                try {
+                    mHelper.getUserDao().update(mItem);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                DaysList.getInstance().add(mItem);
+                try {
+                    mHelper.getUserDao().create(mItem);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        return super.onOptionsItemSelected(item);
+        finish();
+        return true;
     }
 
     private void setContent() {

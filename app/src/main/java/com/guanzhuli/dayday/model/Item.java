@@ -108,6 +108,7 @@ public class Item {
 
     public void setThemeName(String themeName) {
         mThemeName = themeName;
+        setTheme();
     }
 
     public String getThemeName() {

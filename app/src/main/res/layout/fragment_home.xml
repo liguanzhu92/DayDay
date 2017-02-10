@@ -37,12 +37,12 @@
                     android:textColor="@color/icons"
                     android:text="sample detail"
                     android:layout_centerInParent="true"
-                    android:id="@+id/home_details"
+                    android:id="@+id/home_title"
                     android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             <LinearLayout
                     android:gravity="center_horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:layout_above="@+id/home_details"
+                    android:layout_height="wrap_content" android:layout_above="@+id/home_title"
                     android:layout_alignParentStart="true">
                 <View
                         android:layout_marginRight="@dimen/general_padding"
@@ -52,6 +52,7 @@
                         android:background="@android:color/darker_gray"/>
                 <ImageView
                         android:tint="@color/icons"
+                        android:id="@+id/home_icon"
                         android:src="@drawable/ic_anniversary"
                         android:layout_width="wrap_content" android:layout_height="wrap_content"/>
                 <View
@@ -63,7 +64,7 @@
             </LinearLayout>
             <TextView
                     android:paddingBottom="@dimen/wide_padding"
-                    android:layout_above="@id/home_details"
+                    android:layout_above="@id/home_title"
                     android:textColor="@color/icons"
                     android:text="390"
                     android:layout_centerHorizontal="true"

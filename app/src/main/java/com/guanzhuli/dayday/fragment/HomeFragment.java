@@ -8,11 +8,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import com.guanzhuli.dayday.NewDayActivity;
 import com.guanzhuli.dayday.R;
 import com.guanzhuli.dayday.SettingsActivity;
@@ -20,6 +24,7 @@ import com.guanzhuli.dayday.controller.ORMHelper;
 import com.guanzhuli.dayday.customized.MyAdapter;
 import com.guanzhuli.dayday.model.DaysList;
 import com.guanzhuli.dayday.model.Item;
+import com.guanzhuli.dayday.utils.CheckCover;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -30,9 +35,11 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
     private BottomSheetBehavior mBottomSheetBehavior;
     private View rootView;
-    private ImageView mImageSetting, mImageAdd, mImageBackgrount;
+    private TextView mTextDays, mTextTitle;
+    private ImageView mImageSetting, mImageAdd, mImageBackground, mImageBefore, mImageIcon;
     private RecyclerView mRecyclerView;
     private ORMHelper mHelper;
+    private int mCoverPosition;
     private DaysList mDaysList = DaysList.getInstance();
 
 
@@ -46,18 +53,31 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView =  inflater.inflate(R.layout.fragment_home, container, false);
-        DaysList.getInstance().clear();
         mHelper = ORMHelper.getInstance(getContext());
+        initialView();
+        setListener();
+        return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("home", "Start");
         try {
+            DaysList.getInstance().clear();
             ArrayList<Item> temp = (ArrayList<Item>) mHelper.getUserDao().queryForAll();
             mDaysList.addAll(temp);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        initialView();
-        setListener();
+        setContent();
         setRecyclerView();
-        return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("home", "Resume");
     }
 
     private void initialView() {
@@ -67,8 +87,25 @@ public class HomeFragment extends Fragment {
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         mImageSetting = (ImageView) rootView.findViewById(R.id.home_setting);
         mImageAdd = (ImageView) rootView.findViewById(R.id.home_add);
-        mImageBackgrount = (ImageView) rootView.findViewById(R.id.home_background);
+        mImageBackground = (ImageView) rootView.findViewById(R.id.home_background);
+        mImageIcon = (ImageView)rootView.findViewById(R.id.home_icon);
+        mImageBefore = (ImageView) rootView.findViewById(R.id.home_before);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.home_recyclerview);
+        mTextDays = (TextView) rootView.findViewById(R.id.home_days);
+        mTextTitle = (TextView) rootView.findViewById(R.id.home_title);
+    }
+
+    private void setContent() {
+        mCoverPosition = new CheckCover(getContext()).getCoverPosition();
+        Item item = DaysList.getInstance().get(mCoverPosition);
+        item.setInterval();
+        item.setTheme();
+        mImageBackground.setImageResource(item.getTheme().BackgroundResources());
+        mImageIcon.setImageResource(item.getTheme().IconResources());
+        mImageBefore.setImageResource(
+                item.isBefore()? R.drawable.ic_arrow_upward : R.drawable.ic_arrow_downward);
+        mTextTitle.setText(item.getTitle());
+        mTextDays.setText(String.valueOf(item.getInterval()));
     }
 
     private void setListener() {
@@ -99,10 +136,13 @@ public class HomeFragment extends Fragment {
                 startActivity(setting);
             }
         });
-        mImageBackgrount.setOnClickListener(new View.OnClickListener() {
+        mImageBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DetailFragment detailFragment = new DetailFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("list_position", String.valueOf(mCoverPosition));
+                detailFragment.setArguments(bundle);
                 getFragmentManager().beginTransaction()
                         .addToBackStack(getTag())
                         .replace(R.id.container_main, detailFragment)
@@ -113,6 +153,19 @@ public class HomeFragment extends Fragment {
 
     private void setRecyclerView() {
         MyAdapter adapter = new MyAdapter(getContext());
+        adapter.setOnItemClickListener(new MyAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, String data) {
+                DetailFragment detailFragment = new DetailFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("list_position", data);
+                detailFragment.setArguments(bundle);
+                getFragmentManager().beginTransaction()
+                        .addToBackStack(getTag())
+                        .replace(R.id.container_main, detailFragment)
+                        .commit();
+            }
+        });
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
