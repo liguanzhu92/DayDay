@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/category_anniversary"
+              android:title="Anniversary"/>
+        <item android:id="@+id/category_birthday"
+              android:title="Birthday"/>
+        <item android:id="@+id/category_event"
+              android:title="Event"/>
+        <item android:id="@+id/category_holiday"
+              android:title="Holiday"/>
+        <item android:id="@+id/category_love"
+              android:title="Love"/>
+        <item android:id="@+id/category_school"
+              android:title="School"/>
+        <item android:id="@+id/category_trip"
+              android:title="Trip"/>
+        <item android:id="@+id/category_work"
+              android:title="Work"/>
+    </group>
+</menu>

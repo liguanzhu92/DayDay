@@ -9,7 +9,7 @@
     <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
         <ImageView
                 android:id="@+id/details_background"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:src="@mipmap/anniversary_2"
                 android:layout_width="match_parent" android:layout_height="match_parent"/>
         <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">

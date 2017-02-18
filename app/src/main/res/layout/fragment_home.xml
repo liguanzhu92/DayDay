@@ -6,36 +6,13 @@
         tools:context="com.guanzhuli.dayday.fragment.HomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <android.support.v4.widget.NestedScrollView
-            android:id="@+id/bottom_sheet"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="true"
-            android:background="@color/white_overlay"
-            app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
-        <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent" android:layout_height="match_parent">
-            <ImageView
-                    android:id="@+id/home_background"
-                    android:clickable="true"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/anniversary_2"
-                    android:layout_width="match_parent" android:layout_height="wrap_content"/>
-            <TextView
-                    android:id="@+id/home_your_days"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:text="Your Days"
-                    android:padding="16dp"
-                    android:textSize="16sp"/>
-            <android.support.v7.widget.RecyclerView
-                    android:id="@+id/home_recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="246dp"/>
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
     <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
+        <ImageView
+                android:id="@+id/home_background"
+                android:clickable="true"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/anniversary_2"
+                android:layout_width="match_parent" android:layout_height="match_parent"/>
         <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
             <ImageView
                     android:id="@+id/home_add"
@@ -47,6 +24,7 @@
                     android:tint="@color/icons"
                     android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             <ImageView
+                    android:visibility="gone"
                     android:id="@+id/home_setting"
                     android:clickable="true"
                     android:src="@drawable/ic_settings"
@@ -103,5 +81,27 @@
                     android:layout_width="wrap_content" android:layout_height="wrap_content"/>
         </RelativeLayout>
     </FrameLayout>
-
+    <android.support.v4.widget.NestedScrollView
+            android:id="@+id/bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:clipToPadding="true"
+            android:background="@color/white_overlay"
+            app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent" android:layout_height="match_parent">
+            <TextView
+                    android:id="@+id/home_your_days"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="Your Days"
+                    android:padding="16dp"
+                    android:textSize="16sp"/>
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/home_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="246dp"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

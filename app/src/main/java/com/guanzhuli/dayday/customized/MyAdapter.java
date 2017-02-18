@@ -3,6 +3,7 @@ package com.guanzhuli.dayday.customized;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +12,14 @@ import com.guanzhuli.dayday.R;
 import com.guanzhuli.dayday.model.DaysList;
 import com.guanzhuli.dayday.model.Item;
 
+import java.util.ArrayList;
+
 /**
  * Created by Guanzhu Li on 2/6/2017.
  */
 public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
     private Context mContext;
-
-
+    private ArrayList<Item> mList;
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder {
         public LinearLayout foreground;
@@ -35,14 +37,15 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> imp
         }
     }
 
-    public MyAdapter(Context context) {
+    public MyAdapter(Context context, DaysList list) {
         mContext = context;
+        mList = list;
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ExampleViewHolder) {
-            final Item item = DaysList.getInstance().get(position);
+            final Item item = mList.get(position);
             item.setInterval();
             item.setTheme();
             ((ExampleViewHolder) holder).mTextTitle.setText(item.getTitle());

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +28,6 @@ public class NewDayActivity extends AppCompatActivity {
     private ImageView mImageBackground;
     private Switch mSwitchCover, mSwitchNotification;
     private CalendarView mCalendarView;
-    private RadioGroup mRadioGroupCategory, mRadioGroupRepeat;
     private Item mItem;
     private boolean mFlag;
     private int mPosition;
@@ -77,20 +76,24 @@ public class NewDayActivity extends AppCompatActivity {
         mImageBackground = (ImageView) findViewById(R.id.new_day_bg);
         mCalendarView = (CalendarView) findViewById(R.id.new_day_calendar);
         mCalendarView.setVisibility(View.GONE);
-        mRadioGroupCategory = (RadioGroup) findViewById(R.id.new_day_category_select);
-        mRadioGroupCategory.setVisibility(View.GONE);
-        mRadioGroupRepeat = (RadioGroup) findViewById(R.id.new_day_repeat_select);
-        mRadioGroupRepeat.setVisibility(View.GONE);
     }
 
     private void setListener() {
+        registerForContextMenu(mImageCategory);
+        registerForContextMenu(mImageRepeat);
         mImageCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRadioGroupCategory.setVisibility(View.VISIBLE);
-                createCategoryButton();
+                openContextMenu(view);
             }
         });
+        mImageRepeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openContextMenu(view);
+            }
+        });
+
         mImageDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,14 +113,7 @@ public class NewDayActivity extends AppCompatActivity {
                 }
             }
         });
-        mImageRepeat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(NewDayActivity.this, "choose repeat", Toast.LENGTH_LONG).show();
-                mRadioGroupRepeat.setVisibility(View.VISIBLE);
-                createRepeatButton();
-            }
-        });
+
         mImageChooseBG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,50 +129,6 @@ public class NewDayActivity extends AppCompatActivity {
                 mItem.setDate(date);
                 mTextDate.setText(date);
                 mCalendarView.setVisibility(View.GONE);
-            }
-        });
-    }
-
-    private void createRepeatButton() {
-        mRadioGroupRepeat.removeAllViews();
-        final String[] btnName = getResources().getStringArray(R.array.repeat_name);
-        for (int i = 0; i < btnName.length; i++) {
-            RadioButton radioButton = new RadioButton(this);
-            if(i == mItem.getRepeat()) {
-                radioButton.setChecked(true);
-            }
-            radioButton.setText(btnName[i]);
-            radioButton.setId(i);
-            mRadioGroupRepeat.addView(radioButton);
-        }
-        mRadioGroupRepeat.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                mTextRepeat.setText(btnName[i]);
-                mItem.setRepeat(i);
-                mRadioGroupRepeat.setVisibility(View.GONE);
-            }
-        });
-    }
-
-    private void createCategoryButton() {
-        mRadioGroupCategory.removeAllViews();
-        final String[] btnName = getResources().getStringArray(R.array.theme_category);
-        for (int i = 0; i < btnName.length; i++) {
-            RadioButton radioButton = new RadioButton(this);
-            if(i == convertCategory(mItem.getThemeName())) {
-                radioButton.setChecked(true);
-            }
-            radioButton.setText(btnName[i]);
-            radioButton.setId(i);
-            mRadioGroupCategory.addView(radioButton);
-        }
-        mRadioGroupCategory.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                mTextCategory.setText(btnName[i]);
-                mItem.setThemeName(btnName[i]);
-                mRadioGroupCategory.setVisibility(View.GONE);
             }
         });
     }
@@ -239,6 +191,16 @@ public class NewDayActivity extends AppCompatActivity {
         return  repeatName[i];
     }
 
+    private int convertRepeat(String s) {
+        String[] repeatName = getResources().getStringArray(R.array.repeat_name);
+        for (int i = 0; i < repeatName.length; i++) {
+            if (s.equals(repeatName[i])) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     private int convertCategory(String s) {
         String[] categoryName = getResources().getStringArray(R.array.theme_category);
         for (int i = 0; i < categoryName.length; i++) {
@@ -247,5 +209,75 @@ public class NewDayActivity extends AppCompatActivity {
             }
         }
         return -1;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId() == R.id.new_day_edit_category) {
+            int default_cate;
+            default_cate = mItem.getThemeName() != null ? convertCategory(mItem.getThemeName()) : 0;
+            getMenuInflater().inflate(R.menu.category_menu, menu);
+            menu.getItem(default_cate).setChecked(true);
+            menu.setHeaderTitle("Category");
+            menu.setHeaderIcon(R.drawable.calendar_small);
+            return;
+        }
+        if (v.getId() == R.id.new_day_edit_repeat) {
+            int default_cate = mItem.getRepeat();
+            getMenuInflater().inflate(R.menu.repeat_menu, menu);
+            menu.getItem(default_cate).setChecked(true);
+            menu.setHeaderTitle("Repeat");
+            menu.setHeaderIcon(R.drawable.calendar_small);
+            return;
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        String cate_string = null;
+        String repeat_string = null;
+        switch (item.getItemId()) {
+            case R.id.category_anniversary:
+                cate_string = item.getTitle().toString();
+            case R.id.category_birthday:
+                cate_string = item.getTitle().toString();
+            case R.id.category_event:
+                cate_string = item.getTitle().toString();
+            case R.id.category_holiday:
+                cate_string = item.getTitle().toString();
+            case R.id.category_love:
+                cate_string = item.getTitle().toString();
+            case R.id.category_school:
+                cate_string = item.getTitle().toString();
+            case R.id.category_trip:
+                cate_string = item.getTitle().toString();
+            case R.id.repeat_none:
+                repeat_string = item.getTitle().toString();
+            case R.id.repeat_weekly:
+                repeat_string = item.getTitle().toString();
+            case R.id.repeat_bi:
+                repeat_string = item.getTitle().toString();
+            case R.id.repeat_month:
+                repeat_string = item.getTitle().toString();
+            case R.id.repeat_quarter:
+                repeat_string = item.getTitle().toString();
+            case R.id.repeat_semi:
+                repeat_string = item.getTitle().toString();
+            case R.id.repeat_annual:
+                repeat_string = item.getTitle().toString();
+            default:
+                super.onContextItemSelected(item);
+        }
+        if (cate_string != null) {
+            mTextCategory.setText(cate_string);
+            mItem.setThemeName(cate_string);
+            return true;
+        }
+        if (repeat_string != null){
+            mTextRepeat.setText(repeat_string);
+            mItem.setRepeat(convertRepeat(repeat_string));
+        }
+        return true;
     }
 }

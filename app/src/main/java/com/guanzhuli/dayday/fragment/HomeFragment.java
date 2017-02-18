@@ -1,25 +1,23 @@
 package com.guanzhuli.dayday.fragment;
 
 
-import android.app.Activity;
-import android.content.Context;
+
 import android.content.Intent;
+import android.graphics.*;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.view.WindowManager;
-import android.widget.FrameLayout;
+
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.guanzhuli.dayday.NewDayActivity;
 import com.guanzhuli.dayday.R;
@@ -29,10 +27,11 @@ import com.guanzhuli.dayday.customized.MyAdapter;
 import com.guanzhuli.dayday.model.DaysList;
 import com.guanzhuli.dayday.model.Item;
 import com.guanzhuli.dayday.utils.CheckCover;
-import com.guanzhuli.dayday.utils.Convert;
+import com.guanzhuli.dayday.utils.Reminder;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,12 +39,13 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
     private BottomSheetBehavior mBottomSheetBehavior;
     private View rootView;
-    private TextView mTextDays, mTextTitle, mTextYourDays;
+    private TextView mTextDays, mTextTitle;
     private ImageView mImageSetting, mImageAdd, mImageBackground, mImageBefore, mImageIcon;
     private RecyclerView mRecyclerView;
     private ORMHelper mHelper;
     private int mCoverPosition;
     private DaysList mDaysList = DaysList.getInstance();
+    private MyAdapter mAdapter;
 
 
     public HomeFragment() {
@@ -71,7 +71,18 @@ public class HomeFragment extends Fragment {
         try {
             DaysList.getInstance().clear();
             ArrayList<Item> temp = (ArrayList<Item>) mHelper.getUserDao().queryForAll();
-            mDaysList.addAll(temp);
+            if (temp.size() == 0) {
+                Item item = new Item();
+                item.setCover(true);
+                item.setTitle("Big Day");
+                item.setDate("2016/01/12");
+                item.setThemeName("anniversary");
+                mDaysList.add(item);
+                mHelper.getUserDao().create(item);
+            } else {
+                mDaysList.addAll(temp);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -88,19 +99,11 @@ public class HomeFragment extends Fragment {
     private void initialView() {
         View bottomSheet = rootView.findViewById( R.id.bottom_sheet );
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int height = displaymetrics.heightPixels;
-        mBottomSheetBehavior.setPeekHeight(height);
-        // Log.d("home",String.valueOf((int)Convert.convertPixelsToDp(height, getContext())));
+        mBottomSheetBehavior.setPeekHeight(175);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         mImageSetting = (ImageView) rootView.findViewById(R.id.home_setting);
         mImageAdd = (ImageView) rootView.findViewById(R.id.home_add);
         mImageBackground = (ImageView) rootView.findViewById(R.id.home_background);
-        mTextYourDays = (TextView) rootView.findViewById(R.id.home_your_days);
-        mImageBackground.getLayoutParams().height = height - 175;
-        Log.d("home_bg", String.valueOf(mImageBackground.getLayoutParams().height));
-        Log.d("home_text", String.valueOf(mTextYourDays.getLayoutParams().height));
         mImageBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
         mImageIcon = (ImageView)rootView.findViewById(R.id.home_icon);
         mImageBefore = (ImageView) rootView.findViewById(R.id.home_before);
@@ -127,8 +130,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onStateChanged(View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                    mBottomSheetBehavior.setPeekHeight(getActivity().getWindow().getDecorView().getHeight());
-                    Log.d("home_collapsed", String.valueOf(getActivity().getWindow().getDecorView().getHeight()));
+                    mBottomSheetBehavior.setPeekHeight(175);
                 }
             }
 
@@ -156,6 +158,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 DetailFragment detailFragment = new DetailFragment();
                 Bundle bundle = new Bundle();
+
                 bundle.putString("list_position", String.valueOf(mCoverPosition));
                 detailFragment.setArguments(bundle);
                 getFragmentManager().beginTransaction()
@@ -167,10 +170,12 @@ public class HomeFragment extends Fragment {
     }
 
     private void setRecyclerView() {
-        MyAdapter adapter = new MyAdapter(getContext());
-        adapter.setOnItemClickListener(new MyAdapter.OnRecyclerViewItemClickListener() {
+        mAdapter = new MyAdapter(getContext(), DaysList.getInstance());
+        mAdapter.setOnItemClickListener(new MyAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, String data) {
+                Reminder reminder = new Reminder(getContext());
+                reminder.scheduleReminder(15000, data);
                 DetailFragment detailFragment = new DetailFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("list_position", data);
@@ -181,13 +186,79 @@ public class HomeFragment extends Fragment {
                         .commit();
             }
         });
-        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
                 LinearLayoutManager.VERTICAL);
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setLayoutManager(layoutManager);
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                final int position = viewHolder.getAdapterPosition();
+                if (direction == ItemTouchHelper.LEFT) {
+                    try {
+                        mHelper.getUserDao().delete(mDaysList.get(position));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    boolean cover = mDaysList.get(position).isCover();
+                    mDaysList.remove(position);
+                    if (cover) {
+                        setContent();
+                    }
+/*                    mAdapter.notifyItemRemoved(position);
+                    mAdapter.notifyItemChanged(position, mDaysList);*/
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+
+/*            @Override
+            public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                super.clearView(recyclerView, viewHolder);
+                viewHolder.itemView.setAlpha(1);
+            }*/
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                Bitmap icon;
+                Paint p = new Paint();
+                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
+
+                    View itemView = viewHolder.itemView;
+                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
+                    float width = height / 3;
+
+                    if(dX < 0){
+                        p.setColor(Color.parseColor("#D32F2F"));
+                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
+                        c.drawRect(background,p);
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_delete);
+                        RectF icon_dest = new RectF((float) itemView.getRight() - 2*width ,(float) itemView.getTop() + width,(float) itemView.getRight() - width,(float)itemView.getBottom() - width);
+                        c.drawBitmap(icon,null,icon_dest,p);
+                    }
+                }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+/*                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                    float width = (float) viewHolder.itemView.getWidth();
+                    float alpha = 1.0f - Math.abs(dX) / width;
+                    viewHolder.itemView.setAlpha(alpha);
+                    viewHolder.itemView.setTranslationX(dX);
+                } else {
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY,
+                            actionState, isCurrentlyActive);
+                    return;
+                }*/
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
 }

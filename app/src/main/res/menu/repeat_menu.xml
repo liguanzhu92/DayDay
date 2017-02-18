@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/repeat_none"
+              android:title="None"/>
+        <item android:id="@+id/repeat_weekly"
+              android:title="Weekly"/>
+        <item android:id="@+id/repeat_bi"
+              android:title="Bi-Weekly"/>
+        <item android:id="@+id/repeat_month"
+              android:title="Monthly"/>
+        <item android:id="@+id/repeat_quarter"
+              android:title="Quarterly"/>
+        <item android:id="@+id/repeat_semi"
+              android:title="Semi-annually"/>
+        <item android:id="@+id/repeat_annual"
+              android:title="Annually"/>
+    </group>
+</menu>

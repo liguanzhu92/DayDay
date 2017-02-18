@@ -58,10 +58,6 @@
                         android:tint="@color/divider"
                         android:layout_width="0dp" android:layout_height="wrap_content"/>
             </LinearLayout>
-            <RadioGroup
-                    android:id="@+id/new_day_category_select"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
             <LinearLayout
                     android:gravity="center_horizontal"
                     android:layout_width="match_parent"
@@ -140,10 +136,6 @@
                         android:tint="@color/divider"
                         android:layout_width="0dp" android:layout_height="wrap_content"/>
             </LinearLayout>
-            <RadioGroup
-                    android:id="@+id/new_day_repeat_select"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
             <LinearLayout
                     android:gravity="center_horizontal"
                     android:layout_width="match_parent"
