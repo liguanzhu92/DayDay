@@ -76,4 +76,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_day_notification">Notification:</string>
+    <string name="new_day_repeat">Repeat:</string>
+    <string name="new_day_set_cover">Set as Cover:</string>
+    <string name="new_day_event_date">Event Date:</string>
+    <string name="new_day_category">Category:</string>
+    <string name="new_day_title">Title:</string>
+    <string name="new_day_customize_bg">Customize Background :</string>
 </resources>

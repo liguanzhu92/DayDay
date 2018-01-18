@@ -1,18 +1,29 @@
 package com.guanzhuli.dayday;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
+import android.widget.CalendarView;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.guanzhuli.dayday.controller.ORMHelper;
 import com.guanzhuli.dayday.model.DaysList;
 import com.guanzhuli.dayday.model.Item;
 import com.guanzhuli.dayday.utils.CheckCover;
+import com.guanzhuli.dayday.utils.PermissionUtil;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -23,8 +34,8 @@ import java.util.Date;
 
 public class NewDayActivity extends AppCompatActivity {
     private EditText mEditTitle;
-    private ImageView mImageCategory,mImageDate, mImageRepeat, mImageChooseBG;
-    private TextView mTextCategory, mTextDate, mTextRepeat;
+    private ImageView mImageCategory,mImageDate, mImageRepeat;
+    private TextView mTextCategory, mTextDate, mTextRepeat, mTextChooseBG;
     private ImageView mImageBackground;
     private Switch mSwitchCover, mSwitchNotification;
     private CalendarView mCalendarView;
@@ -67,10 +78,10 @@ public class NewDayActivity extends AppCompatActivity {
         mImageCategory = (ImageView) findViewById(R.id.new_day_edit_category);
         mImageDate = (ImageView) findViewById(R.id.new_day_edit_date);
         mImageRepeat = (ImageView) findViewById(R.id.new_day_edit_repeat);
-        mImageChooseBG = (ImageView) findViewById(R.id.new_day_edit_bg);
         mTextCategory = (TextView) findViewById(R.id.new_day_category);
         mTextDate = (TextView) findViewById(R.id.new_day_event_date);
         mTextRepeat = (TextView) findViewById(R.id.new_day_repeat);
+        mTextChooseBG = findViewById(R.id.new_day_change_bg);
         mSwitchCover = (Switch) findViewById(R.id.new_day_cover_switch);
         mSwitchNotification = (Switch) findViewById(R.id.new_day_notification_switch);
         mImageBackground = (ImageView) findViewById(R.id.new_day_bg);
@@ -114,10 +125,11 @@ public class NewDayActivity extends AppCompatActivity {
             }
         });
 
-        mImageChooseBG.setOnClickListener(new View.OnClickListener() {
+        mTextChooseBG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(NewDayActivity.this, "choose bg", Toast.LENGTH_LONG).show();
+                PermissionUtil.askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, PermissionUtil.READ_EXST, mContext);
             }
         });
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -240,32 +252,46 @@ public class NewDayActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.category_anniversary:
                 cate_string = item.getTitle().toString();
+                break;
             case R.id.category_birthday:
                 cate_string = item.getTitle().toString();
+                break;
             case R.id.category_event:
                 cate_string = item.getTitle().toString();
+                break;
             case R.id.category_holiday:
                 cate_string = item.getTitle().toString();
+                break;
             case R.id.category_love:
                 cate_string = item.getTitle().toString();
+                break;
             case R.id.category_school:
                 cate_string = item.getTitle().toString();
+                break;
             case R.id.category_trip:
                 cate_string = item.getTitle().toString();
+                break;
             case R.id.repeat_none:
                 repeat_string = item.getTitle().toString();
+                break;
             case R.id.repeat_weekly:
                 repeat_string = item.getTitle().toString();
+                break;
             case R.id.repeat_bi:
                 repeat_string = item.getTitle().toString();
+                break;
             case R.id.repeat_month:
                 repeat_string = item.getTitle().toString();
+                break;
             case R.id.repeat_quarter:
                 repeat_string = item.getTitle().toString();
+                break;
             case R.id.repeat_semi:
                 repeat_string = item.getTitle().toString();
+                break;
             case R.id.repeat_annual:
                 repeat_string = item.getTitle().toString();
+                break;
             default:
                 super.onContextItemSelected(item);
         }
@@ -279,5 +305,20 @@ public class NewDayActivity extends AppCompatActivity {
             mItem.setRepeat(convertRepeat(repeat_string));
         }
         return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(ActivityCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED) {
+            switch (requestCode) {
+                case PermissionUtil.READ_EXST:
+                    // TODO: read image
+                break;
+            }
+            Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show();
+        }
     }
 }

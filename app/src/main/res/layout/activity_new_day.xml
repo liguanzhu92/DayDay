@@ -22,7 +22,7 @@
                     android:layout_width="match_parent" android:layout_height="wrap_content">
                 <TextView
                         android:layout_weight="2.5"
-                        android:text="Title:"
+                        android:text="@string/new_day_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
                 <EditText
@@ -41,7 +41,7 @@
                     android:layout_width="match_parent" android:layout_height="wrap_content">
                 <TextView
                         android:layout_weight="2.5"
-                        android:text="Category:"
+                        android:text="@string/new_day_category"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
                 <TextView
@@ -79,7 +79,7 @@
                     android:layout_width="match_parent" android:layout_height="wrap_content">
                 <TextView
                         android:layout_weight="2.5"
-                        android:text="Event Date:"
+                        android:text="@string/new_day_event_date"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
                 <TextView
@@ -102,16 +102,18 @@
             <Switch
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="Set as Cover:"
+                    android:text="@string/new_day_set_cover"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/new_day_cover_switch"/>
             <Switch
+                    android:visibility="gone"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="Notification:"
+                    android:text="@string/new_day_notification"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/new_day_notification_switch"/>
             <LinearLayout
+                    android:visibility="gone"
                     android:paddingTop="@dimen/general_padding"
                     android:paddingBottom="@dimen/general_padding"
                     android:gravity="center_vertical"
@@ -119,7 +121,7 @@
                     android:layout_width="match_parent" android:layout_height="wrap_content">
                 <TextView
                         android:layout_weight="2.5"
-                        android:text="Repeat:"
+                        android:text="@string/new_day_repeat"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
                 <TextView
@@ -150,6 +152,7 @@
                         android:background="@android:color/darker_gray"/>
             </LinearLayout>
             <FrameLayout
+
                     android:paddingTop="@dimen/activity_vertical_margin"
                     android:paddingBottom="@dimen/general_padding"
                     android:layout_width="match_parent" android:layout_height="wrap_content">
@@ -158,24 +161,11 @@
                         android:src="@mipmap/anniversary_3"
                         android:scaleType="centerCrop"
                         android:layout_width="match_parent" android:layout_height="100dp"/>
-                <LinearLayout
-                        android:paddingTop="@dimen/general_padding"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent" android:layout_height="wrap_content">
-                    <TextView
-                            android:layout_weight="9.5"
-                            android:text="Customize Background :"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"/>
-                    <ImageView
-                            android:clickable="true"
-                            android:id="@+id/new_day_edit_bg"
-                            android:layout_weight="1"
-                            android:src="@drawable/ic_chevron_right"
-                            android:tint="@color/divider"
-                            android:layout_width="0dp" android:layout_height="wrap_content"/>
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/new_day_change_bg"
+                    android:text="@string/new_day_customize_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
             </FrameLayout>
         </LinearLayout>
     </ScrollView>

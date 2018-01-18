@@ -213,17 +213,9 @@ public class HomeFragment extends Fragment {
                     if (cover) {
                         setContent();
                     }
-/*                    mAdapter.notifyItemRemoved(position);
-                    mAdapter.notifyItemChanged(position, mDaysList);*/
                     mAdapter.notifyDataSetChanged();
                 }
             }
-
-/*            @Override
-            public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                super.clearView(recyclerView, viewHolder);
-                viewHolder.itemView.setAlpha(1);
-            }*/
 
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
@@ -245,16 +237,6 @@ public class HomeFragment extends Fragment {
                     }
                 }
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-/*                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-                    float width = (float) viewHolder.itemView.getWidth();
-                    float alpha = 1.0f - Math.abs(dX) / width;
-                    viewHolder.itemView.setAlpha(alpha);
-                    viewHolder.itemView.setTranslationX(dX);
-                } else {
-                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY,
-                            actionState, isCurrentlyActive);
-                    return;
-                }*/
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
