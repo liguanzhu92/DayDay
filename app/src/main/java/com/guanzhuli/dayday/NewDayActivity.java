@@ -3,11 +3,7 @@ package com.guanzhuli.dayday;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +15,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.guanzhuli.dayday.controller.ORMHelper;
 import com.guanzhuli.dayday.model.DaysList;
 import com.guanzhuli.dayday.model.Item;
 import com.guanzhuli.dayday.utils.CheckCover;
@@ -32,7 +27,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class NewDayActivity extends AppCompatActivity {
+import static com.guanzhuli.dayday.utils.PermissionUtil.hasPermission;
+
+public class NewDayActivity extends BaseActivity {
     private EditText mEditTitle;
     private ImageView mImageCategory,mImageDate, mImageRepeat;
     private TextView mTextCategory, mTextDate, mTextRepeat, mTextChooseBG;
@@ -43,7 +40,7 @@ public class NewDayActivity extends AppCompatActivity {
     private boolean mFlag;
     private int mPosition;
     private Context mContext;
-    private ORMHelper mHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +48,6 @@ public class NewDayActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("");
         setContentView(R.layout.activity_new_day);
         mContext = this;
-        mHelper = ORMHelper.getInstance(mContext);
         initialView();
         Intent intent = getIntent();
         mFlag = intent.getBooleanExtra("add",false);
@@ -129,7 +125,11 @@ public class NewDayActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(NewDayActivity.this, "choose bg", Toast.LENGTH_LONG).show();
-                PermissionUtil.askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, PermissionUtil.READ_EXST, mContext);
+                if (!hasPermission(mContext, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    PermissionUtil.askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, PermissionUtil.READ_EXST, mContext);
+                } else {
+                    selectBackground();
+                }
             }
         });
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -307,18 +307,16 @@ public class NewDayActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(ActivityCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED) {
-            switch (requestCode) {
-                case PermissionUtil.READ_EXST:
-                    // TODO: read image
-                break;
-            }
-            Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show();
-        }
+    private void selectBackground() {
+        Intent intent = new Intent();
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PermissionUtil.PICK_IMAGE);
     }
 }

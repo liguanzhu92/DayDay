@@ -12,7 +12,8 @@ import android.widget.Toast;
  */
 
 public class PermissionUtil {
-    public static final int READ_EXST = 0x4;
+    public static final int READ_EXST = 0x1;
+    public static final int PICK_IMAGE = 0x2;
 
     public static void askForPermission(String permission, Integer requestCode, Context context) {
         if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
@@ -22,7 +23,11 @@ public class PermissionUtil {
                 ActivityCompat.requestPermissions((Activity) context, new String[]{permission}, requestCode);
             }
         } else {
-            Toast.makeText((Activity) context, "" + permission + " is already granted.", Toast.LENGTH_SHORT).show();
+            Toast.makeText( context, "" + permission + " is already granted.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static boolean hasPermission(Context context, String permission){
+        return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
     }
 }
