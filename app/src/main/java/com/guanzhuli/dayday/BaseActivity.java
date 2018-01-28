@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.guanzhuli.dayday.controller.ORMHelper;
-import com.guanzhuli.dayday.utils.PermissionUtil;
+import com.guanzhuli.dayday.utils.Constant;
 
 public class BaseActivity extends AppCompatActivity {
     ORMHelper mHelper;
@@ -24,7 +24,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(ActivityCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED) {
             switch (requestCode) {
-                case PermissionUtil.READ_EXST:
+                case Constant.READ_EXST:
                     Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
                     break;
             }

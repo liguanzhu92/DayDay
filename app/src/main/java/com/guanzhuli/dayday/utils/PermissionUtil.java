@@ -12,8 +12,6 @@ import android.widget.Toast;
  */
 
 public class PermissionUtil {
-    public static final int READ_EXST = 0x1;
-    public static final int PICK_IMAGE = 0x2;
 
     public static void askForPermission(String permission, Integer requestCode, Context context) {
         if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {

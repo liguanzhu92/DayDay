@@ -3,6 +3,7 @@ package com.guanzhuli.dayday;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.guanzhuli.dayday.model.DaysList;
 import com.guanzhuli.dayday.model.Item;
 import com.guanzhuli.dayday.utils.CheckCover;
+import com.guanzhuli.dayday.utils.Constant;
 import com.guanzhuli.dayday.utils.PermissionUtil;
 
 import java.sql.SQLException;
@@ -126,7 +128,7 @@ public class NewDayActivity extends BaseActivity {
             public void onClick(View view) {
                 Toast.makeText(NewDayActivity.this, "choose bg", Toast.LENGTH_LONG).show();
                 if (!hasPermission(mContext, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    PermissionUtil.askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, PermissionUtil.READ_EXST, mContext);
+                    PermissionUtil.askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, Constant.READ_EXST, mContext);
                 } else {
                     selectBackground();
                 }
@@ -308,15 +310,21 @@ public class NewDayActivity extends BaseActivity {
     }
 
     private void selectBackground() {
-        Intent intent = new Intent();
-        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        getIntent.setType("image/*");
+        Intent selectImageIntent = new Intent(mContext, ImageViewActivity.class);
+        startActivity(selectImageIntent);
+    }
 
-        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickIntent.setType("image/*");
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            if (resultCode == RESULT_OK && requestCode == Constant.PICK_IMAGE ) {
+                String image = data.getStringExtra(Constant.KEY_IMAGES);
+                mImageBackground.setImageBitmap(BitmapFactory.decodeFile(image));
+                // TODO: cache image in project
+            }
+        } catch (Exception ex) {
 
-        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PermissionUtil.PICK_IMAGE);
+        }
     }
 }

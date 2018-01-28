@@ -7,4 +7,5 @@
     <dimen name="narrow_padding">4dp</dimen>
     <dimen name="bottom_icon_padding_vertical">24dp</dimen>
     <dimen name="bottom_icon_padding_horizontal">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

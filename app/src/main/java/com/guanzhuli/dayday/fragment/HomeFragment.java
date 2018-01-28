@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.guanzhuli.dayday.NewDayActivity;
 import com.guanzhuli.dayday.R;
-import com.guanzhuli.dayday.SettingsActivity;
 import com.guanzhuli.dayday.controller.ORMHelper;
 import com.guanzhuli.dayday.customized.MyAdapter;
 import com.guanzhuli.dayday.model.DaysList;
@@ -31,7 +30,6 @@ import com.guanzhuli.dayday.utils.Reminder;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -149,8 +147,7 @@ public class HomeFragment extends Fragment {
         mImageSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent setting = new Intent(getContext(), SettingsActivity.class);
-                startActivity(setting);
+                // TODO: add setting activity
             }
         });
         mImageBackground.setOnClickListener(new View.OnClickListener() {
