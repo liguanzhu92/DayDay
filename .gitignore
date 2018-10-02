@@ -6,6 +6,9 @@
 /.idea/misc.xml
 /.idea/modules.xml
 /.idea/vcs.xml
+/.idea/caches
+/.idea/gradle.xml
+/.idea/codeStyles/
 .DS_Store
 /build
 /captures
